@@ -9,11 +9,11 @@ pipeline {
     }
 
     environment {
-        TENANT_ID="ec78375d-0db0-42cf-82a6-2e6403e95936"
+        TENANT_ID="8267a341-645e-4b88-abc9-dfbc065e82d2"
         IMAGE_NAME = "sprinbootapp"
         IMAGE_TAG = "latest"
-        ACR_NAME= 'springbootdockerreg'
-        ACR_LOGIN_SERVER ='springbootdockerreg.azurecr.io'
+        ACR_NAME= 'springbootdockerregs'
+        ACR_LOGIN_SERVER ='springbootdockerregs.azurecr.io'
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
         RG  = 'demoaks_group'
         NAME = 'demoaks'
@@ -110,7 +110,7 @@ pipeline {
         script {
             echo "Azure Login"
             sh '''
-            az account set --subscription "202d4be6-e0dd-4b9e-84b7-e235d53271a8"
+            az account set --subscription "a8b34663-c89f-4392-807c-03c49e0ced6b"
             az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID 
             az acr login --name $ACR_NAME
             '''
