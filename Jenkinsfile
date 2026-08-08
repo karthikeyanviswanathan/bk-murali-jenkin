@@ -96,8 +96,8 @@ pipeline {
       {
         steps {
             script {
-            echo "Build Docker Image"
-            docker.build  ("${IMAGE_NAME}:${IMAGE_TAG}")
+                echo "Build Docker Image"
+                docker.build  ("${IMAGE_NAME}:${IMAGE_TAG}")
       
         }
       }
@@ -135,26 +135,38 @@ pipeline {
             '''
         }
     }
-   }
-   stage('Azure Login and AKS Deployment')
-   {
-    steps {
-        withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) 
-        {
-        script {
-            echo "Azure Login Test"
-            sh '''
-            az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
-            az account set --subscription "202d4be6-e0dd-4b9e-84b7-e235d53271a8" 
-            az aks get-credentials --resource-group $RG --name $NAME --overwrite-existing
-            az acr login --name $ACR_NAME
-            kubectl apply -f k8s/sprinboot-deployment.yaml
-            '''
-        }
-      }
-    }
-   }
-  }
 }
+stage('Azure Login and AKS Deployment')
+{
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'azure-acr-spn',
+            usernameVariable: 'AZURE_USERNAME',
+            passwordVariable: 'AZURE_PASSWORD'
+        )]) {
+            script {
+                echo "Azure Login Test"
+                sh '''
+                az login --service-principal \
+                -u $AZURE_USERNAME \
+                -p $AZURE_PASSWORD \
+                --tenant $TENANT_ID
+
+                az account set --subscription "a8b34663-c89f-4392-807c-03c49e0ced6b"
+
+                az acr login --name $ACR_NAME
+
+                az aks get-credentials \
+                --resource-group $RG \
+                --name $NAME \
+                --overwrite-existing
+
+                kubectl apply -f k8s/sprinboot-deployment.yaml
+                '''
+            }
+        }
+    }
+}
+
 
 
