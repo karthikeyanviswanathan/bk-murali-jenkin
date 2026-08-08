@@ -142,7 +142,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) 
         {
         script {
-            echo "Azure Login"
+            echo "Azure Login Test"
             sh '''
             az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
             az account set --subscription "202d4be6-e0dd-4b9e-84b7-e235d53271a8" 
