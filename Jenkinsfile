@@ -102,27 +102,7 @@ pipeline {
         }
       }
    }
- {
-            script {
-                sh '''
-                az login --service-principal \
-                -u $AZURE_USERNAME \
-                -p $AZURE_PASSWORD \
-                --tenant $TENANT_ID
-
-                az account set --subscription a8b34663-c89f-4392-807c-03c49e0ced6b
-
-                az aks get-credentials \
-                --resource-group $RG \
-                --name $NAME \
-                --overwrite-existing
-
-                kubectl apply -f k8s/sprinboot-deployment.yaml
-                '''
-            }
-        }
-    }
-}
+    
    stage ('Docker Push')
    {
     steps 
@@ -136,8 +116,7 @@ pipeline {
         }
     }
 }
-stage('Azure Login and AKS Deployment')
-{
+stage('Azure Login and AKS Deployment'){
     steps {
         withCredentials([usernamePassword(
             credentialsId: 'azure-acr-spn',
@@ -166,7 +145,13 @@ stage('Azure Login and AKS Deployment')
             }
         }
     }
+
 }
+
+
+}   // closes stages
+
+}   // closes pipeline
 
 
 
